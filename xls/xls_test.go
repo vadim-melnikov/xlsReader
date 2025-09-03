@@ -138,6 +138,10 @@ func TestReadingWierdNumber(t *testing.T) {
 		2: -99999.05,
 		3: -10000.05,
 		4: -14450.05,
+		5: 5,
+		6: -6,
+		7: -15550,
+		8: 15000,
 	}
 
 	for i := 0; i <= wb.GetNumberSheets()-1; i++ {
