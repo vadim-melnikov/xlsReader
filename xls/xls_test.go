@@ -1,7 +1,6 @@
 package xls
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -101,11 +100,11 @@ func TestMiniFatWorkBook(t *testing.T) {
 		sheet, _ := wb.GetSheet(i)
 		if sheet.GetRows() != nil {
 			for _, row := range sheet.GetRows() {
-				if row  != nil {
+				if row != nil {
 
 					for _, col := range row.GetCols() {
 
-					//	fmt.Println(col.GetString())
+						//	fmt.Println(col.GetString())
 						xf := col.GetXFIndex()
 						//fmt.Println(xf)
 						style := wb.GetXFbyIndex(xf)
@@ -115,8 +114,8 @@ func TestMiniFatWorkBook(t *testing.T) {
 						format := wb.GetFormatByIndex(formatIdx)
 						//fmt.Println(format)
 
-						fstr := format.GetFormatString(col)
-						fmt.Println(fstr)
+						format.GetFormatString(col)
+						//fmt.Println(fstr)
 
 					}
 				}
@@ -124,5 +123,37 @@ func TestMiniFatWorkBook(t *testing.T) {
 			}
 		}
 
+	}
+}
+
+func TestReadingWierdNumber(t *testing.T) {
+	wb, err := OpenFile("./../testfie/testNumber.xls")
+	if err != nil {
+		t.Error("Error: ", err)
+	}
+
+	testcases := map[int]float64{
+		0: -18518.04,
+		1: -18518.05,
+		2: -99999.05,
+		3: -10000.05,
+		4: -14450.05,
+	}
+
+	for i := 0; i <= wb.GetNumberSheets()-1; i++ {
+
+		sheet, _ := wb.GetSheet(i)
+		if sheet.GetRows() != nil {
+			for k, row := range sheet.GetRows() {
+				if row != nil {
+					for _, col := range row.GetCols() {
+						val := col.GetFloat64()
+						if val != testcases[k] {
+							t.Errorf("At row %d expected %f, got %f", k, testcases[k], val)
+						}
+					}
+				}
+			}
+		}
 	}
 }
